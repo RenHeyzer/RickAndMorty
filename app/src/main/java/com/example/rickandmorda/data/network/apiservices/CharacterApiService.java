@@ -1,4 +1,4 @@
-package com.example.rickandmorda.network;
+package com.example.rickandmorda.data.network.apiservices;
 
 import com.example.rickandmorda.models.Character;
 import com.example.rickandmorda.models.RickAndMortyResponse;

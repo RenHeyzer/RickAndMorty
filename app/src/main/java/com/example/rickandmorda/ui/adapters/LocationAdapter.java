@@ -10,12 +10,13 @@ import com.example.rickandmorda.databinding.ItemLocationBinding;
 import com.example.rickandmorda.models.Location;
 
 import java.util.ArrayList;
+import java.util.List;
 
 public class LocationAdapter extends RecyclerView.Adapter<LocationAdapter.LocationViewHolder> {
     ItemLocationBinding binding;
-    ArrayList<Location> list = new ArrayList<>();
+    List<Location> list = new ArrayList<>();
 
-    public void addLocationsList(ArrayList<Location> getList) {
+    public void addLocationsList(List<Location> getList) {
         list = getList;
         notifyDataSetChanged();
     }

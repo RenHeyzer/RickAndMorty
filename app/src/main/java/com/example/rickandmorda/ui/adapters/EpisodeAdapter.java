@@ -16,7 +16,7 @@ public class EpisodeAdapter extends RecyclerView.Adapter<EpisodeAdapter.Episodes
     public List<Episode> list = new ArrayList<>();
     ItemEpisodeBinding binding;
 
-    public void addEpisodesList(ArrayList<Episode> list) {
+    public void addEpisodesList(List<Episode> list) {
         this.list = list;
         notifyDataSetChanged();
     }

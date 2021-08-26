@@ -1,7 +1,6 @@
 package com.example.rickandmorda.ui.adapters;
 
 import android.view.LayoutInflater;
-import android.view.View;
 import android.view.ViewGroup;
 
 import androidx.recyclerview.widget.RecyclerView;
@@ -14,11 +13,12 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class CharacterAdapter extends RecyclerView.Adapter<CharacterAdapter.MyViewModel> {
-    public ItemCharacterBinding binding;
+
     public List<Character> list = new ArrayList<>();
     public OnItemClickListener listener;
+    ItemCharacterBinding binding;
 
-    public void addList(ArrayList<Character> list) {
+    public void addList(List<Character> list) {
         this.list = list;
         notifyDataSetChanged();
     }
@@ -30,7 +30,7 @@ public class CharacterAdapter extends RecyclerView.Adapter<CharacterAdapter.MyVi
     @Override
     public MyViewModel onCreateViewHolder(ViewGroup parent, int viewType) {
         binding = ItemCharacterBinding.inflate(LayoutInflater.from(parent.getContext()), parent, false);
-        return new MyViewModel(binding.getRoot());
+        return new MyViewModel(binding);
     }
 
     @Override
@@ -48,10 +48,11 @@ public class CharacterAdapter extends RecyclerView.Adapter<CharacterAdapter.MyVi
     }
 
     public class MyViewModel extends RecyclerView.ViewHolder {
+        ItemCharacterBinding binding;
 
-
-        public MyViewModel(View itemView) {
-            super(itemView);
+        public MyViewModel(ItemCharacterBinding binding) {
+            super(binding.getRoot());
+            this.binding = binding;
         }
 
         private void onBind(Character item) {

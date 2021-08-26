@@ -9,6 +9,7 @@ import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProvider;
 import androidx.recyclerview.widget.LinearLayoutManager;
 
+import com.example.rickandmorda.App;
 import com.example.rickandmorda.databinding.FragmentLocationsBinding;
 import com.example.rickandmorda.ui.adapters.LocationAdapter;
 
@@ -28,7 +29,19 @@ public class LocationsFragment extends Fragment {
     public void onViewCreated(View view, Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
         initialize();
-        setupRequests();
+        checkConnection();
+    }
+
+    private void checkConnection() {
+        if (App.checkConnection(requireContext())) {
+            setupRequests();
+        } else {
+            setupOffRequests();
+        }
+    }
+
+    private void setupOffRequests() {
+        adapter.addLocationsList(locationViewModel.getLocations());
     }
 
     private void setupRequests() {
