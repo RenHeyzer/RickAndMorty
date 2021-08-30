@@ -1,23 +1,25 @@
 package com.example.rickandmorda.ui.fragments.episodes;
 
 import androidx.lifecycle.MutableLiveData;
-import androidx.lifecycle.ViewModel;
 
-import com.example.rickandmorda.App;
+import com.example.rickandmorda.bases.BaseViewModel;
 import com.example.rickandmorda.data.repositories.EpisodeRepository;
 import com.example.rickandmorda.models.Episode;
 import com.example.rickandmorda.models.RickAndMortyResponse;
 
 import java.util.List;
 
-import retrofit2.Call;
-import retrofit2.Callback;
-import retrofit2.Response;
+public class EpisodesViewModel extends BaseViewModel {
 
-public class EpisodesViewModel extends ViewModel {
-    EpisodeRepository episodeRepository = new EpisodeRepository();
-    public MutableLiveData<RickAndMortyResponse<Episode>> fetchEpisode() {
-        return episodeRepository.fetchEpisode();
+    private final EpisodeRepository episodeRepository = new EpisodeRepository();
+    public int page = 1;
+
+    public MutableLiveData<RickAndMortyResponse<Episode>> fetchEpisodes() {
+        return episodeRepository.fetchEpisodes(page);
+    }
+
+    public MutableLiveData<Episode> fetchEpisodesId(int id) {
+        return episodeRepository.fetchEpisodesId(id);
     }
 
     public List<Episode> getEpisodes() {

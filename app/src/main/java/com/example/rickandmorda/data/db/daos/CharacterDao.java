@@ -13,6 +13,7 @@ import java.util.List;
 
 @Dao
 public interface CharacterDao {
+
     @Query("SELECT * FROM character")
     List<Character> getAll();
 

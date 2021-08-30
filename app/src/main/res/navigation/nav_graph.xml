@@ -19,18 +19,46 @@
         android:id="@+id/episodesFragment"
         android:name="com.example.rickandmorda.ui.fragments.episodes.EpisodesFragment"
         android:label="fragment_episodes"
-        tools:layout="@layout/fragment_episodes" />
+        tools:layout="@layout/fragment_episodes">
+        <action
+            android:id="@+id/action_episodesFragment_to_episodesDetailFragment"
+            app:destination="@id/episodesDetailFragment" />
+    </fragment>
     <fragment
         android:id="@+id/locationsFragment"
         android:name="com.example.rickandmorda.ui.fragments.locations.LocationsFragment"
         android:label="fragment_locations"
-        tools:layout="@layout/fragment_locations"/>
+        tools:layout="@layout/fragment_locations">
+        <action
+            android:id="@+id/action_locationsFragment_to_locationsDetailFragment"
+            app:destination="@id/locationsDetailFragment" />
+    </fragment>
 
     <fragment
         android:id="@+id/detailFragment"
         android:name="com.example.rickandmorda.ui.fragments.characters.detail.DetailFragment"
         android:label="fragment_detail"
         tools:layout="@layout/fragment_detail">
+        <argument
+            android:name="position"
+            android:defaultValue="-1"
+            app:argType="integer" />
+    </fragment>
+    <fragment
+        android:id="@+id/episodesDetailFragment"
+        android:name="com.example.rickandmorda.ui.fragments.episodes.episodesdetail.EpisodesDetailFragment"
+        android:label="fragment_episodes_detail"
+        tools:layout="@layout/fragment_episodes_detail">
+        <argument
+            android:name="position"
+            android:defaultValue="-1"
+            app:argType="integer" />
+    </fragment>
+    <fragment
+        android:id="@+id/locationsDetailFragment"
+        android:name="com.example.rickandmorda.ui.fragments.locations.locationsdetail.LocationsDetailFragment"
+        android:label="fragment_locations_detail"
+        tools:layout="@layout/fragment_locations_detail">
         <argument
             android:name="position"
             android:defaultValue="-1"

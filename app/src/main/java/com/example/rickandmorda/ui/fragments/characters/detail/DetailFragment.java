@@ -5,14 +5,15 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
-import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProvider;
 
 import com.bumptech.glide.Glide;
+import com.example.rickandmorda.bases.BaseFragment;
 import com.example.rickandmorda.databinding.FragmentDetailBinding;
 import com.example.rickandmorda.ui.fragments.characters.CharactersViewModel;
 
-public class DetailFragment extends Fragment {
+public class DetailFragment extends BaseFragment<CharactersViewModel, FragmentDetailBinding> {
+
     FragmentDetailBinding binding;
     CharactersViewModel viewModel;
     private int id;
@@ -25,23 +26,15 @@ public class DetailFragment extends Fragment {
     }
 
     @Override
-    public void onViewCreated(View view, Bundle savedInstanceState) {
-        super.onViewCreated(view, savedInstanceState);
-        initialize();
-        getDetailData();
-        setupRequest();
-    }
-
-    private void initialize() {
+    protected void initialize() {
         viewModel = new ViewModelProvider(requireActivity()).get(CharactersViewModel.class);
     }
 
-    private void getDetailData() {
+    @Override
+    protected void setupRequests() {
         id = DetailFragmentArgs.fromBundle(getArguments()).getPosition();
-    }
 
-    private void setupRequest() {
-        viewModel.fetchCharacterId(id).observe(getViewLifecycleOwner(), character -> {
+        viewModel.fetchCharactersId(id).observe(getViewLifecycleOwner(), character -> {
             Glide
                     .with(binding.image)
                     .load(character.getImage())

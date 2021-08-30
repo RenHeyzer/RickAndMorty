@@ -7,6 +7,7 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.bumptech.glide.Glide;
 import com.example.rickandmorda.databinding.ItemCharacterBinding;
+import com.example.rickandmorda.interfaces.OnItemClickListener;
 import com.example.rickandmorda.models.Character;
 
 import java.util.ArrayList;
@@ -16,10 +17,10 @@ public class CharacterAdapter extends RecyclerView.Adapter<CharacterAdapter.MyVi
 
     public List<Character> list = new ArrayList<>();
     public OnItemClickListener listener;
-    ItemCharacterBinding binding;
+    private ItemCharacterBinding binding;
 
     public void addList(List<Character> list) {
-        this.list = list;
+        this.list.addAll(list);
         notifyDataSetChanged();
     }
 
@@ -43,10 +44,6 @@ public class CharacterAdapter extends RecyclerView.Adapter<CharacterAdapter.MyVi
         return list.size();
     }
 
-    public interface OnItemClickListener {
-        void onItemClick(int position);
-    }
-
     public class MyViewModel extends RecyclerView.ViewHolder {
         ItemCharacterBinding binding;
 
@@ -57,13 +54,13 @@ public class CharacterAdapter extends RecyclerView.Adapter<CharacterAdapter.MyVi
 
         private void onBind(Character item) {
             Glide
-                    .with(binding.imageContainer)
+                    .with(binding.image)
                     .load(item.getImage())
                     .into(binding.image);
             binding.title.setText(item.getName());
 
             binding.getRoot().setOnClickListener(v -> {
-                listener.onItemClick(item.getId());
+                listener.onItemClickListener(item.getId());
             });
         }
     }

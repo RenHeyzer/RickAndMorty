@@ -1,24 +1,25 @@
 package com.example.rickandmorda.ui.fragments.locations;
 
 import androidx.lifecycle.MutableLiveData;
-import androidx.lifecycle.ViewModel;
 
-import com.example.rickandmorda.App;
+import com.example.rickandmorda.bases.BaseViewModel;
 import com.example.rickandmorda.data.repositories.LocationRepository;
 import com.example.rickandmorda.models.Location;
 import com.example.rickandmorda.models.RickAndMortyResponse;
 
 import java.util.List;
 
-import retrofit2.Call;
-import retrofit2.Callback;
-import retrofit2.Response;
+public class LocationViewModel extends BaseViewModel {
 
-public class LocationViewModel extends ViewModel {
-    LocationRepository locationRepository = new LocationRepository();
+    private final LocationRepository locationRepository = new LocationRepository();
+    public int page = 1;
 
     public MutableLiveData<RickAndMortyResponse<Location>> fetchLocations() {
-        return locationRepository.fetchLocations();
+        return locationRepository.fetchLocations(page);
+    }
+
+    public MutableLiveData<Location> fetchLocationsId(int id) {
+        return locationRepository.fetchLocationsId(id);
     }
 
     public List<Location> getLocations() {

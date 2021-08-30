@@ -13,13 +13,16 @@ import retrofit2.Callback;
 import retrofit2.Response;
 
 public class EpisodeRepository {
-    public MutableLiveData<RickAndMortyResponse<Episode>> fetchEpisode() {
+    
+    public MutableLiveData<RickAndMortyResponse<Episode>> fetchEpisodes(int page) {
         MutableLiveData<RickAndMortyResponse<Episode>> data = new MutableLiveData<>();
-        App.episodeApiService.fetchEpisodes().enqueue(new Callback<RickAndMortyResponse<Episode>>() {
+        App.episodeApiService.fetchEpisodes(page).enqueue(new Callback<RickAndMortyResponse<Episode>>() {
             @Override
             public void onResponse(Call<RickAndMortyResponse<Episode>> call, Response<RickAndMortyResponse<Episode>> response) {
-                App.episodeDao.insertAll(response.body().getResults());
-                data.setValue(response.body());
+                if (response.body() != null) {
+                    App.episodeDao.insertAll(response.body().getResults());
+                    data.setValue(response.body());
+                }
             }
 
             @Override
@@ -28,6 +31,22 @@ public class EpisodeRepository {
             }
         });
         return data;
+    }
+
+    public MutableLiveData<Episode> fetchEpisodesId(int id) {
+        MutableLiveData<Episode> episodeData = new MutableLiveData<>();
+        App.episodeApiService.fetchEpisodesId(id).enqueue(new Callback<Episode>() {
+            @Override
+            public void onResponse(Call<Episode> call, Response<Episode> response) {
+                episodeData.setValue(response.body());
+            }
+
+            @Override
+            public void onFailure(Call<Episode> call, Throwable t) {
+                episodeData.setValue(null);
+            }
+        });
+        return episodeData;
     }
 
     public List<Episode> getEpisodes() {

@@ -9,6 +9,7 @@ import com.example.rickandmorda.data.db.daos.EpisodeDao;
 import com.example.rickandmorda.data.db.daos.LocationDao;
 
 public class RoomClient {
+
     public AppDatabase provideDatabase(Context context) {
         return Room.databaseBuilder(context, AppDatabase.class, "rick-and-morty_database")
                 .fallbackToDestructiveMigration()

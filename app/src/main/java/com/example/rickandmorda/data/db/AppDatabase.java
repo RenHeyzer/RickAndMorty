@@ -12,7 +12,10 @@ import com.example.rickandmorda.models.Location;
 
 @Database(entities = {Character.class, Episode.class, Location.class}, version = 3)
 public abstract class AppDatabase extends RoomDatabase {
+
     public abstract CharacterDao characterDao();
+
     public abstract EpisodeDao episodeDao();
+
     public abstract LocationDao locationDao();
 }

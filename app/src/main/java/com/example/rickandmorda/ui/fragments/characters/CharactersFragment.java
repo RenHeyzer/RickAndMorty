@@ -6,21 +6,25 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Toast;
 
-import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProvider;
 import androidx.navigation.Navigation;
 import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 
-import com.example.rickandmorda.App;
 import com.example.rickandmorda.R;
+import com.example.rickandmorda.bases.BaseFragment;
 import com.example.rickandmorda.databinding.FragmentCharactersBinding;
 import com.example.rickandmorda.ui.adapters.CharacterAdapter;
 
+public class CharactersFragment extends BaseFragment<CharactersViewModel, FragmentCharactersBinding> {
 
-public class CharactersFragment extends Fragment {
     CharactersViewModel viewModel;
     FragmentCharactersBinding binding;
     CharacterAdapter adapter = new CharacterAdapter();
+    private LinearLayoutManager linearLayoutManager;
+    private int visibleItemCount;
+    private int totalItemCount;
+    private int pastVisiblesItems;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -30,47 +34,58 @@ public class CharactersFragment extends Fragment {
     }
 
     @Override
-    public void onViewCreated(View view, Bundle savedInstanceState) {
-        super.onViewCreated(view, savedInstanceState);
-        initialize();
-        checkConnection();
-    }
-
-    private void checkConnection() {
-        if (App.checkConnection(requireContext())) {
-            setupRequests();
-        } else {
-            setupOffRequests();
-        }
-    }
-
-    private void setupOffRequests() {
-        adapter.addList(viewModel.getCharacters());
-    }
-
-    private void initialize() {
+    protected void initialize() {
         viewModel = new ViewModelProvider(requireActivity()).get(CharactersViewModel.class);
         setupCharacterRecycler();
     }
 
     private void setupCharacterRecycler() {
-        binding.charactersRecycler.setLayoutManager(new LinearLayoutManager(requireContext()));
+        linearLayoutManager = new LinearLayoutManager(getContext());
+        binding.charactersRecycler.setLayoutManager(linearLayoutManager);
         binding.charactersRecycler.setAdapter(adapter);
 
         adapter.setOnItemClickListener(position -> {
-            if (App.checkConnection(requireContext())) {
-                Navigation.findNavController(requireActivity(), R.id.nav_host_fragment)
+            if (checkConnection()) {
+                Navigation.findNavController(CharactersFragment.this.requireActivity(), R.id.nav_host_fragment)
                         .navigate(CharactersFragmentDirections.
                                 actionCharactersFragmentToDetailFragment().setPosition(position));
             } else {
-                Toast.makeText(getContext(), R.string.internet_dialog_title, Toast.LENGTH_LONG).show();
+                Toast.makeText(CharactersFragment.this.getContext(), R.string.internet_dialog_title, Toast.LENGTH_LONG).show();
             }
         });
     }
 
-    private void setupRequests() {
-        viewModel.fetchCharacters().observe(getViewLifecycleOwner(), characterRickAndMortyResponse -> {
-            adapter.addList(characterRickAndMortyResponse.getResults());
+    @Override
+    protected void setupRequests() {
+        if (!fetchCharacters()) {
+            adapter.addList(viewModel.getCharacters());
+        }
+
+        binding.charactersRecycler.addOnScrollListener(new RecyclerView.OnScrollListener() {
+            @Override
+            public void onScrolled(RecyclerView recyclerView, int dx, int dy) {
+                super.onScrolled(recyclerView, dx, dy);
+                if (dy > 0) {
+                    visibleItemCount = linearLayoutManager.getChildCount();
+                    totalItemCount = linearLayoutManager.getItemCount();
+                    pastVisiblesItems = linearLayoutManager.findFirstVisibleItemPosition();
+                    if ((visibleItemCount + pastVisiblesItems) >= totalItemCount) {
+                        viewModel.page++;
+                        fetchCharacters();
+                    }
+                }
+            }
         });
+    }
+
+    private boolean fetchCharacters() {
+        if (checkConnection()) {
+            viewModel.fetchCharacters().observe(getViewLifecycleOwner(), characterRickAndMortyResponse -> {
+                adapter.addList(characterRickAndMortyResponse.getResults());
+            });
+            return true;
+        } else {
+            return false;
+        }
     }
 }

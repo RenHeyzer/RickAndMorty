@@ -1,23 +1,25 @@
 package com.example.rickandmorda.ui.fragments.characters;
 
 import androidx.lifecycle.MutableLiveData;
-import androidx.lifecycle.ViewModel;
 
+import com.example.rickandmorda.bases.BaseViewModel;
 import com.example.rickandmorda.data.repositories.CharacterRepository;
 import com.example.rickandmorda.models.Character;
 import com.example.rickandmorda.models.RickAndMortyResponse;
 
 import java.util.List;
 
-public class CharactersViewModel extends ViewModel {
+public class CharactersViewModel extends BaseViewModel {
+
     private final CharacterRepository characterRepository = new CharacterRepository();
+    public int page = 1;
 
     public MutableLiveData<RickAndMortyResponse<Character>> fetchCharacters() {
-        return characterRepository.fetchCharacter();
+        return characterRepository.fetchCharacters(page);
     }
 
-    public MutableLiveData<Character> fetchCharacterId(int id) {
-        return characterRepository.fetchCharacterId(id);
+    public MutableLiveData<Character> fetchCharactersId(int id) {
+        return characterRepository.fetchCharactersId(id);
     }
 
     public List<Character> getCharacters() {
