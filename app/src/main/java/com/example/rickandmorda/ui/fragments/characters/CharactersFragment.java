@@ -58,7 +58,7 @@ public class CharactersFragment extends BaseFragment<CharactersViewModel, Fragme
     @Override
     protected void setupRequests() {
         if (!fetchCharacters()) {
-            adapter.addList(viewModel.getCharacters());
+            adapter.submitList(viewModel.getCharacters());
         }
 
         binding.charactersRecycler.addOnScrollListener(new RecyclerView.OnScrollListener() {
@@ -81,7 +81,7 @@ public class CharactersFragment extends BaseFragment<CharactersViewModel, Fragme
     private boolean fetchCharacters() {
         if (checkConnection()) {
             viewModel.fetchCharacters().observe(getViewLifecycleOwner(), characterRickAndMortyResponse -> {
-                adapter.addList(characterRickAndMortyResponse.getResults());
+                adapter.submitList(characterRickAndMortyResponse.getResults());
             });
             return true;
         } else {

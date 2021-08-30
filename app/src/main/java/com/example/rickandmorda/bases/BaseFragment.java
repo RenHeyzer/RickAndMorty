@@ -18,7 +18,6 @@ public abstract class BaseFragment<ViewModel extends BaseViewModel, Binding exte
         setupRequests();
         setupObserve();
         checkConnection();
-        fetchDataWithCheckConnection();
     }
 
     protected void initialize() {
@@ -31,14 +30,6 @@ public abstract class BaseFragment<ViewModel extends BaseViewModel, Binding exte
 
     protected void setupObserve() {
 
-    }
-
-    protected boolean fetchDataWithCheckConnection() {
-        if (checkConnection()) {
-            return true;
-        } else {
-            return false;
-        }
     }
 
     protected boolean checkConnection() {

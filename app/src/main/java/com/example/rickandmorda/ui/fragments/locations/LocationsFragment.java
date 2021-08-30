@@ -57,7 +57,7 @@ public class LocationsFragment extends BaseFragment<LocationViewModel, FragmentL
     @Override
     protected void setupRequests() {
         if (!fetchLocations()) {
-            adapter.addLocationsList(locationViewModel.getLocations());
+            adapter.submitList(locationViewModel.getLocations());
         }
 
         binding.locationsRecycler.addOnScrollListener(new RecyclerView.OnScrollListener() {
@@ -80,7 +80,7 @@ public class LocationsFragment extends BaseFragment<LocationViewModel, FragmentL
     private boolean fetchLocations() {
         if (checkConnection()) {
             locationViewModel.fetchLocations().observe(getViewLifecycleOwner(), locationRickAndMortyResponse -> {
-                adapter.addLocationsList(locationRickAndMortyResponse.getResults());
+                adapter.submitList(locationRickAndMortyResponse.getResults());
             });
             return true;
         } else {

@@ -1,8 +1,11 @@
 package com.example.rickandmorda.ui.adapters;
 
+import android.annotation.SuppressLint;
 import android.view.LayoutInflater;
 import android.view.ViewGroup;
 
+import androidx.recyclerview.widget.DiffUtil;
+import androidx.recyclerview.widget.ListAdapter;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.bumptech.glide.Glide;
@@ -10,18 +13,12 @@ import com.example.rickandmorda.databinding.ItemCharacterBinding;
 import com.example.rickandmorda.interfaces.OnItemClickListener;
 import com.example.rickandmorda.models.Character;
 
-import java.util.ArrayList;
-import java.util.List;
+public class CharacterAdapter extends ListAdapter<Character, CharacterAdapter.MyViewHolder> {
 
-public class CharacterAdapter extends RecyclerView.Adapter<CharacterAdapter.MyViewModel> {
-
-    public List<Character> list = new ArrayList<>();
     public OnItemClickListener listener;
-    private ItemCharacterBinding binding;
 
-    public void addList(List<Character> list) {
-        this.list.addAll(list);
-        notifyDataSetChanged();
+    public CharacterAdapter() {
+        super(new CharacterDiffUtil());
     }
 
     public void setOnItemClickListener(OnItemClickListener listener) {
@@ -29,25 +26,33 @@ public class CharacterAdapter extends RecyclerView.Adapter<CharacterAdapter.MyVi
     }
 
     @Override
-    public MyViewModel onCreateViewHolder(ViewGroup parent, int viewType) {
-        binding = ItemCharacterBinding.inflate(LayoutInflater.from(parent.getContext()), parent, false);
-        return new MyViewModel(binding);
+    public CharacterAdapter.MyViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
+        return new CharacterAdapter.MyViewHolder(ItemCharacterBinding.inflate(LayoutInflater.from(parent.getContext()), parent, false));
     }
 
     @Override
-    public void onBindViewHolder(MyViewModel holder, int position) {
-        holder.onBind(list.get(position));
+    public void onBindViewHolder(CharacterAdapter.MyViewHolder holder, int position) {
+        holder.onBind(getItem(position));
     }
 
-    @Override
-    public int getItemCount() {
-        return list.size();
+    public static class CharacterDiffUtil extends DiffUtil.ItemCallback<Character> {
+
+        @Override
+        public boolean areItemsTheSame(Character oldItem, Character newItem) {
+            return oldItem.getId() == newItem.getId();
+        }
+
+        @SuppressLint("DiffUtilEquals")
+        @Override
+        public boolean areContentsTheSame(Character oldItem, Character newItem) {
+            return oldItem == newItem;
+        }
     }
 
-    public class MyViewModel extends RecyclerView.ViewHolder {
-        ItemCharacterBinding binding;
+    public class MyViewHolder extends RecyclerView.ViewHolder {
+        private ItemCharacterBinding binding;
 
-        public MyViewModel(ItemCharacterBinding binding) {
+        public MyViewHolder(ItemCharacterBinding binding) {
             super(binding.getRoot());
             this.binding = binding;
         }

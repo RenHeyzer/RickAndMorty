@@ -58,7 +58,7 @@ public class EpisodesFragment extends BaseFragment<EpisodesViewModel, FragmentEp
     @Override
     protected void setupRequests() {
         if (!fetchEpisodes()) {
-            adapter.addEpisodesList(episodesViewModel.getEpisodes());
+            adapter.submitList(episodesViewModel.getEpisodes());
         }
 
         binding.episodesRecycler.addOnScrollListener(new RecyclerView.OnScrollListener() {
@@ -81,7 +81,7 @@ public class EpisodesFragment extends BaseFragment<EpisodesViewModel, FragmentEp
     private boolean fetchEpisodes() {
         if (checkConnection()) {
             episodesViewModel.fetchEpisodes().observe(getViewLifecycleOwner(), episodeRickAndMortyResponse -> {
-                adapter.addEpisodesList(episodeRickAndMortyResponse.getResults());
+                adapter.submitList(episodeRickAndMortyResponse.getResults());
             });
             return true;
         } else {

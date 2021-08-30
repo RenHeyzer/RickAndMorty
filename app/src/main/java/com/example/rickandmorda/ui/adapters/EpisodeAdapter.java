@@ -1,26 +1,23 @@
 package com.example.rickandmorda.ui.adapters;
 
+import android.annotation.SuppressLint;
 import android.view.LayoutInflater;
 import android.view.ViewGroup;
 
+import androidx.recyclerview.widget.DiffUtil;
+import androidx.recyclerview.widget.ListAdapter;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.rickandmorda.databinding.ItemEpisodeBinding;
 import com.example.rickandmorda.interfaces.OnItemClickListener;
 import com.example.rickandmorda.models.Episode;
 
-import java.util.ArrayList;
-import java.util.List;
+public class EpisodeAdapter extends ListAdapter<Episode, EpisodeAdapter.EpisodesViewHolder> {
 
-public class EpisodeAdapter extends RecyclerView.Adapter<EpisodeAdapter.EpisodesViewHolder> {
-
-    public List<Episode> list = new ArrayList<>();
     public OnItemClickListener listener;
-    private ItemEpisodeBinding binding;
 
-    public void addEpisodesList(List<Episode> list) {
-        this.list.addAll(list);
-        notifyDataSetChanged();
+    public EpisodeAdapter() {
+        super(new EpisodeDiffUtil());
     }
 
     public void setOnItemClickListener(OnItemClickListener listener) {
@@ -28,23 +25,31 @@ public class EpisodeAdapter extends RecyclerView.Adapter<EpisodeAdapter.Episodes
     }
 
     @Override
-    public EpisodesViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
-        binding = ItemEpisodeBinding.inflate(LayoutInflater.from(parent.getContext()), parent, false);
-        return new EpisodesViewHolder(binding);
+    public EpisodeAdapter.EpisodesViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
+        return new EpisodeAdapter.EpisodesViewHolder(ItemEpisodeBinding.inflate(LayoutInflater.from(parent.getContext()), parent, false));
     }
 
     @Override
-    public void onBindViewHolder(EpisodesViewHolder holder, int position) {
-        holder.onBind(list.get(position));
+    public void onBindViewHolder(EpisodeAdapter.EpisodesViewHolder holder, int position) {
+        holder.onBind(getItem(position));
     }
 
-    @Override
-    public int getItemCount() {
-        return list.size();
+    public static class EpisodeDiffUtil extends DiffUtil.ItemCallback<Episode> {
+
+        @Override
+        public boolean areItemsTheSame(Episode oldItem, Episode newItem) {
+            return oldItem.getId() == newItem.getId();
+        }
+
+        @SuppressLint("DiffUtilEquals")
+        @Override
+        public boolean areContentsTheSame(Episode oldItem, Episode newItem) {
+            return oldItem == newItem;
+        }
     }
 
     public class EpisodesViewHolder extends RecyclerView.ViewHolder {
-        ItemEpisodeBinding binding;
+        private ItemEpisodeBinding binding;
 
         public EpisodesViewHolder(ItemEpisodeBinding binding) {
             super(binding.getRoot());
